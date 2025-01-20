@@ -17,7 +17,6 @@ uint8_t MTU_SIZE = 128;
 uint8_t PACKET_SIZE = MTU_SIZE - 3;
 
 bool deviceConnected = false;
-bool oldDeviceConnected = false;
 
 int messageLength = 0;
 uint8_t messageBuffer[1000];
@@ -40,6 +39,10 @@ class Callbacks: public BLEServerCallbacks, public BLECharacteristicCallbacks {
     void onDisconnect(BLEServer* pServer) {
       log_i("Device disconnected");
       deviceConnected = false;
+          // Optional: More aggressive cleanup
+      pServer->getAdvertising()->stop();
+      delay(100);
+      pServer->getAdvertising()->start();
     }
 
     void onWrite(BLECharacteristic *characteristic) {
@@ -94,18 +97,6 @@ void setup() {
 }
 
 void loop() {
-   // disconnecting
-   if (!deviceConnected && oldDeviceConnected) {
-      delay(500); // give the bluetooth stack the chance to get things ready
-      server->startAdvertising(); // restart advertising
-      oldDeviceConnected = deviceConnected;
-   }
-   // connecting
-   if (deviceConnected && !oldDeviceConnected) {
-      // do stuff here on connecting
-      oldDeviceConnected = deviceConnected;
-   }
-   
    messageLength = Serial1.available();
    if (messageLength > 0) {
       messageLength = Serial1.readBytes(messageBuffer, messageLength);
