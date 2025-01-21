@@ -66,12 +66,12 @@ Callbacks callbacks;
 
 void setup() {
    // Create the BLE Device
-   //BLEDevice::init("Little Focer V4");
+   BLEDevice::init("Little Focer V4");
    //BLEDevice::init("SOLO V2");
    //BLEDevice::init("ESP32 Wireless");
    //BLEDevice::init("MotoSurf ESC");
    //BLEDevice::init("Black Diamond");
-   BLEDevice::init("Big Bang");
+   //BLEDevice::init("Big Bang");
    BLEDevice::setPower(ESP_PWR_LVL_P9);
    BLEDevice::setMTU(MTU_SIZE);
 
