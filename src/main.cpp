@@ -4,6 +4,18 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
+#ifndef RX_PIN
+#error "RX_PIN not defined"
+#endif
+
+#ifndef TX_PIN
+#error "TX_PIN not defined"
+#endif
+
+#ifndef BLE_NAME
+#error "BLE_NAME not defined"
+#endif
+
 BLEUUID UARTServiceUUID = BLEUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
 BLEUUID UARTRxCharacteristicUUID = BLEUUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");
 BLEUUID UARTTxCharacteristicUUID = BLEUUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E");
@@ -66,12 +78,7 @@ Callbacks callbacks;
 
 void setup() {
    // Create the BLE Device
-   BLEDevice::init("Little Focer V4");
-   //BLEDevice::init("SOLO V2");
-   //BLEDevice::init("ESP32 Wireless");
-   //BLEDevice::init("MotoSurf ESC");
-   //BLEDevice::init("Black Diamond");
-   //BLEDevice::init("Big Bang");
+   BLEDevice::init(BLE_NAME);
    BLEDevice::setPower(ESP_PWR_LVL_P9);
    BLEDevice::setMTU(MTU_SIZE);
 
@@ -92,7 +99,7 @@ void setup() {
    server->getAdvertising()->start();
 
    // Set up serial connection to VESC
-   Serial1.begin(115200, SERIAL_8N1, 20, 21, false);
+   Serial1.begin(115200, SERIAL_8N1, RX_PIN, TX_PIN, false);
    log_i("Init complete");
 }
 
